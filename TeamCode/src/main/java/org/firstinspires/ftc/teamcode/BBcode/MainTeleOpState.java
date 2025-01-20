@@ -14,9 +14,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.Arm;
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.Viper;
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.WristClaw;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.OuttakeWristClaw;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.OuttakeSlides;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeSlides;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeWristClaw;
 
 @TeleOp(name = "MainTeleopState")
 public class MainTeleOpState extends LinearOpMode{
@@ -38,12 +39,30 @@ public class MainTeleOpState extends LinearOpMode{
         LowerOuttakeSpecimen
     }
 
+    enum HangState {
+        Home,
+        RaiseOuttakeHang,
+        Hang,
+        Lower
+    }
+
+    enum SubmersibleIntakeState {
+        Home,
+        ExtendIntakeSubmersible,
+        WristDownSubmersible,
+        IntakeAtSubmersible,
+        WristUpSubmersible,
+        RetractIntakeSubmersible
+
+    }
 
     HighBasketState highBasketState = HighBasketState.Home;
     SpecimenClipState specimenClipState = SpecimenClipState.Home;
+    HangState hangState = HangState.Home;
+    SubmersibleIntakeState submersibleIntakeState = SubmersibleIntakeState.Home;
 
-    ElapsedTime wristTimer = new ElapsedTime();
-
+    ElapsedTime outtakewristTimer = new ElapsedTime();
+//Need to Tune time
     final double wristFlipTime = 0.75;
 
     private void handleGamepad1 () {
@@ -62,12 +81,12 @@ public class MainTeleOpState extends LinearOpMode{
         telemetry.setAutoClear(false);
         //Init for the other classes this opmode pulls methods from
         MecanumDrivetrain drivetrain = new MecanumDrivetrain(this);
-        Arm arm = new Arm(this, telemetryHelper);
-        Viper viper = new Viper(this);
-        WristClaw wristClaw = new WristClaw(this);
-        arm.Reset();
-        viper.StopAndResetEncoder();
-        wristTimer.reset();
+        OuttakeWristClaw outtakeWristClaw = new OuttakeWristClaw(this);
+        OuttakeSlides outtakeSlides = new OuttakeSlides(this);
+        IntakeWristClaw intakeWristClaw = new IntakeWristClaw(this);
+        outtakeSlides.resetEncoderRight();
+        outtakeSlides.resetEncoderLeft();
+        outtakewristTimer.reset();
 
         //Call the function to initialize telemetry functions
 //        telemetryHelper.initMotorTelemetry( viperMotor, "viperMotor");
@@ -75,98 +94,117 @@ public class MainTeleOpState extends LinearOpMode{
         telemetryHelper.initGamepadTelemetry(gamepad2);
         //Where the start button is clicked, put some starting commands after
         waitForStart();
-        arm.MoveToHome();
 
         while(opModeIsActive()){ //while loop for when program is active
 
             //Drive code
             drivetrain.Drive();
 
-            handleGamepad1(viper);
-            handleGamepad2(wristClaw);
+            handleGamepad1();
+            handleGamepad2();
 
             switch (highBasketState) {
                 case Home:
-                    if () {
-
+                    if (gamepad2.dpad_up && gamepad2.left_trigger > 0) {
+                        outtakeSlides.ExtendHighBasket();
+                        highBasketState = HighBasketState.RaiseOuttakeSample;
                     }
                     break;
                 case RaiseOuttakeSample:
-                    if () {
-
+                    if (outtakeSlides.getIsOuttakeLeftHangExtend() && outtakeSlides.getIsOuttakeRightHangExtend()) {
+                        outtakeWristClaw.OuttakeWristSampleDropPosition();
+                        highBasketState = HighBasketState.WristDumpSample;
+                        outtakewristTimer.reset();
                     }
-                    else if () {
-
+                    else if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
+                        outtakeSlides.ExtendClosed();
+                        highBasketState = HighBasketState.LowerOuttakeSample;
                     }
                     break;
 
                 case WristDumpSample:
-                    if () {
-
+                    if (outtakewristTimer.seconds() >= wristFlipTime) {
+                        highBasketState = HighBasketState.HighBasket;
                     }
-                    else if () {
-
+                    else if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
+                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        highBasketState = HighBasketState.WristUpSample;
+                        outtakewristTimer.reset();
                     }
                     break;
 
                 case HighBasket:
-                    if () {
-
+                    if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
+                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        highBasketState = HighBasketState.WristUpSample;
+                        outtakewristTimer.reset();
                     }
                     break;
 
                 case WristUpSample:
-                    if () {
-
+                    if (outtakewristTimer.seconds() >= wristFlipTime) {
+                        outtakeSlides.ExtendClosed();
+                        highBasketState = HighBasketState.LowerOuttakeSample;
                     }
                     break;
 
                 case LowerOuttakeSample:
-                    if () {
-
+                    if (outtakeSlides.getIsOuttakeRightClosedExtend() && outtakeSlides.getIsOuttakeLeftClosedExtend()) {
+                        highBasketState = HighBasketState.Home;
                     }
+                    break;
             }
 
             switch (specimenClipState) {
                 case Home:
-                    if () {
-
+                    if (gamepad2.dpad_up && gamepad2.right_trigger > 0) {
+                        outtakeSlides.ExtendSpecimen();
+                        specimenClipState = SpecimenClipState.RaiseOuttakeSpecimen;
                     }
                     break;
                 case RaiseOuttakeSpecimen:
-                    if () {
-
+                    if (outtakeSlides.getIsOuttakeRightSpecimenExtend() && outtakeSlides.getIsOuttakeLeftSpecimenExtend()) {
+                        outtakeWristClaw.OuttakeWristSpecimenDropPosition();
+                        specimenClipState = SpecimenClipState.WristOutSpecimen;
+                        outtakewristTimer.reset();
                     }
-                    else if () {
-
+                    else if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
+                        outtakeSlides.ExtendClosed();
+                        specimenClipState = SpecimenClipState.LowerOuttakeSpecimen;
                     }
                     break;
 
                 case WristOutSpecimen:
-                    if () {
-
+                    if (outtakewristTimer.seconds() >= wristFlipTime) {
+                        specimenClipState = SpecimenClipState.SpecimenHang;
                     }
-                    else if () {
-
+                    else if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
+                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        specimenClipState = SpecimenClipState.WristInSpecimen;
+                        outtakewristTimer.reset();
                     }
                     break;
 
                 case SpecimenHang:
-                    if () {
-
+                    if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
+                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        specimenClipState = SpecimenClipState.WristInSpecimen;
+                        outtakewristTimer.reset();
                     }
                     break;
 
                 case WristInSpecimen:
-                    if () {
-
+                    if (outtakewristTimer.seconds() >= wristFlipTime) {
+                        outtakeSlides.ExtendClosed();
+                        specimenClipState = SpecimenClipState.LowerOuttakeSpecimen;
                     }
                     break;
 
                 case LowerOuttakeSpecimen:
-                    if () {
-
+                    if (outtakeSlides.getIsOuttakeRightClosedExtend() && outtakeSlides.getIsOuttakeLeftClosedExtend()) {
+                        specimenClipState = SpecimenClipState.Home;
                     }
+                    break;
 
 
             }
