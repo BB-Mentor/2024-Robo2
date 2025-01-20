@@ -7,6 +7,8 @@ import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedLight;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import org.bluebananas.ftc.roadrunneractions.TrajectoryActionBuilders.AutoRefactorTest_Trajectories;
+
 public class MeepMeepVisualizer {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(500);
@@ -14,49 +16,17 @@ public class MeepMeepVisualizer {
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(BlueSpecimen(meepMeep))
-                .addEntity(BlueLeft(meepMeep))
-                .addEntity(RedRightOption2(meepMeep))
-                .addEntity(RedBasket(meepMeep))
-                .addEntity(RedSpecimen(meepMeep))
+                .addEntity(AutoRefactorTest(meepMeep))
                 .start();
     }
 
     //begin auto runs
 
-    //generates path for BlueRightOption1
-    private static RoadRunnerBotEntity BlueSpecimen(MeepMeep meepMeep)
+    //generates path for AutoRefactorTest
+    private static RoadRunnerBotEntity AutoRefactorTest(MeepMeep meepMeep)
     {
         RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "blue");
-        botEntity.runAction(ActionBuilder.BlueSpecimen(botEntity.getDrive()::actionBuilder));
-        return botEntity;
-    }
-
-    //generates path for BlueLeft
-    private static RoadRunnerBotEntity BlueLeft(MeepMeep meepMeep)
-    {
-        RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "blue");
-        botEntity.runAction(ActionBuilder.BlueBasket(botEntity.getDrive()::actionBuilder));
-        return botEntity;
-    }
-
-    //generates path for RedRightOption2
-    private static RoadRunnerBotEntity RedRightOption2(MeepMeep meepMeep) {
-        RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "red");
-        botEntity.runAction(ActionBuilder.RedRightOption2(botEntity.getDrive()::actionBuilder));
-        return botEntity;
-    }
-
-    //generates path for RedLeft
-    private static RoadRunnerBotEntity RedBasket(MeepMeep meepMeep) {
-        RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "red");
-        botEntity.runAction(ActionBuilder.RedBasket(botEntity.getDrive()::actionBuilder));
-        return botEntity;
-    }
-
-    private static RoadRunnerBotEntity RedSpecimen(MeepMeep meepMeep) {
-        RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "red");
-        botEntity.runAction(ActionBuilder.RedSpecimen(botEntity.getDrive()::actionBuilder));
+        botEntity.runAction(AutoRefactorTest_Trajectories.Full(botEntity.getDrive()::actionBuilder));
         return botEntity;
     }
 
@@ -78,6 +48,9 @@ public class MeepMeepVisualizer {
         return new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                // Set bot size: width, height
+                .setDimensions(18,18)
+
                 .setColorScheme(c)
                 .build();
 
