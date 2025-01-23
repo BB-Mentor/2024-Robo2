@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.bluebananas.ftc.roadrunneractions.TrajectoryActionBuilders.AutoRefactorTest_Trajectories;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeWristClaw;
 import org.firstinspires.ftc.teamcode.PinpointDrive;
 
 @Config
@@ -15,7 +16,8 @@ public class AutoRefactorTest extends LinearOpMode {
     @Override
     public void runOpMode() {
     //Initialization steps
-        //Creates instance of MechanismActionBuilders;
+        //Creates instance of MechanismControllers;
+        IntakeWristClaw intakeWristClaw = new IntakeWristClaw(this);
 
         //Initializes Pinpoint
         Pose2d initialPose = AutoRefactorTest_Trajectories.topLeft;
@@ -29,9 +31,13 @@ public class AutoRefactorTest extends LinearOpMode {
         //run auto steps
         Actions.runBlocking(new SequentialAction(
                 AutoRefactorTest_Trajectories.topLeft_To_topRight(pinpointDrive::actionBuilder),
+                intakeWristClaw.OpenClaw(),
                 AutoRefactorTest_Trajectories.topRight_To_bottomRight(pinpointDrive::actionBuilder),
+                intakeWristClaw.CloseClaw(),
                 AutoRefactorTest_Trajectories.bottomRight_To_bottomLeft(pinpointDrive::actionBuilder),
-                AutoRefactorTest_Trajectories.bottomLeft_To_topLeft(pinpointDrive::actionBuilder)
+                intakeWristClaw.OpenClaw(),
+                AutoRefactorTest_Trajectories.bottomLeft_To_topLeft(pinpointDrive::actionBuilder),
+                intakeWristClaw.CloseClaw()
         ));
     }
 }

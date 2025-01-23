@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.BBcode.MechanismControllers;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -21,7 +25,7 @@ public class IntakeWristClaw {
     double closePosition = 0;
     double openPosition = 0;
     //-----------------------------------------
-
+    //actions for teleop
     public void intakeWristPickupPosition() {
         intakeWristCustom(pickupPosition);
     }
@@ -37,7 +41,13 @@ public class IntakeWristClaw {
     public void intakeClawOpenPosition() {
         intakeClawCustom(openPosition);
     }
+    //-----------------------------------------
+    //RR actions for auto
+    public Action OpenClaw() {return new moveClawTo(openPosition);}
+    public Action CloseClaw() {return new moveClawTo(closePosition);}
 
+    //-----------------------------------------
+    //base actions for teleop
     public void intakeWristCustom(double position)
     {
         if (_intakeWrist == null)
@@ -55,6 +65,17 @@ public class IntakeWristClaw {
             _opMode.telemetry.addLine("Intake Claw Servo not found!");
         } else {
             _intakeClaw.setPosition(position);
+        }
+    }
+    //-----------------------------------------
+    //base RR actions for auto
+    public class moveClawTo implements Action {
+        double position;
+        moveClawTo(double p) {position = p;}
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            intakeClawCustom(position);
+            return false;
         }
     }
 }
