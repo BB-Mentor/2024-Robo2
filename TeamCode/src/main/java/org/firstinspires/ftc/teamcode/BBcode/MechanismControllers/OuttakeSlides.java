@@ -40,6 +40,20 @@ public class OuttakeSlides {
         double ticksPerInch = 537.7 / 4.625;
         return (int) (lengthInches * ticksPerInch);
     }
+    public DcMotorEx get_outtakeMotorRight() {
+        return _outtakeMotorRight;
+    }
+    public DcMotorEx get_outtakeMotorLeft() {
+        return _outtakeMotorLeft;
+    }
+    public boolean getIsOuttakeRightHighBasketExtend() {return _outtakeMotorRight.getCurrentPosition() > InchConverterToTicks(highBasketExtend - 1);}
+    public boolean getIsOuttakeLeftHighBasketExtend() {return _outtakeMotorLeft.getCurrentPosition() > InchConverterToTicks(highBasketExtend - 1);}
+    public boolean getIsOuttakeRightSpecimenExtend() {return _outtakeMotorLeft.getCurrentPosition() > InchConverterToTicks(specimenExtend - 1);}
+    public boolean getIsOuttakeLeftSpecimenExtend() {return _outtakeMotorLeft.getCurrentPosition() > InchConverterToTicks(specimenExtend - 1);}
+    public boolean getIsOuttakeRightHangExtend() {return _outtakeMotorLeft.getCurrentPosition() > InchConverterToTicks(hangExtend - 1);}
+    public boolean getIsOuttakeLeftHangExtend() {return _outtakeMotorLeft.getCurrentPosition() > InchConverterToTicks(hangExtend - 1);}
+    public boolean getIsOuttakeRightClosedExtend() {return _outtakeMotorLeft.getCurrentPosition() < InchConverterToTicks(closedExtend + 1);}
+    public boolean getIsOuttakeLeftClosedExtend() {return _outtakeMotorLeft.getCurrentPosition() < InchConverterToTicks(closedExtend + 1);}
 
     public void ExtendHighBasket() {
         outtakeMotorRightCustom(highBasketExtend, 0.75);
@@ -59,6 +73,26 @@ public class OuttakeSlides {
     public void ExtendClosed() {
         outtakeMotorRightCustom(closedExtend, 0.75);
 
+    }
+
+    public void resetEncoderRight() {
+        if (_outtakeMotorRight == null) {
+            _opMode.telemetry.addLine("outtakeMotorRight not found!");
+            return;
+        }
+        else {
+            _outtakeMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+    }
+
+    public void resetEncoderLeft() {
+        if (_outtakeMotorLeft == null) {
+            _opMode.telemetry.addLine("outtakeMotorLeft not found!");
+            return;
+        }
+        else {
+            _outtakeMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
     }
 
     public void outtakeMotorRightCustom(double lengthInches, double power) {
