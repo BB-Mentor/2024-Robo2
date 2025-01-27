@@ -14,10 +14,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.OuttakeWristClaw;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.OuttakeWrist;
 import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.OuttakeSlides;
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeSlides;
-import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeWristClaw;
+import org.firstinspires.ftc.teamcode.BBcode.MechanismControllers.IntakeClaw;
 
 @TeleOp(name = "MainTeleopState")
 public class MainTeleOpState extends LinearOpMode{
@@ -81,9 +80,9 @@ public class MainTeleOpState extends LinearOpMode{
         telemetry.setAutoClear(false);
         //Init for the other classes this opmode pulls methods from
         MecanumDrivetrain drivetrain = new MecanumDrivetrain(this);
-        OuttakeWristClaw outtakeWristClaw = new OuttakeWristClaw(this);
+        OuttakeWrist outtakeWristClaw = new OuttakeWrist(this);
         OuttakeSlides outtakeSlides = new OuttakeSlides(this);
-        IntakeWristClaw intakeWristClaw = new IntakeWristClaw(this);
+        IntakeClaw intakeWristClaw = new IntakeClaw(this);
         outtakeSlides.resetEncoderRight();
         outtakeSlides.resetEncoderLeft();
         outtakewristTimer.reset();
@@ -112,7 +111,7 @@ public class MainTeleOpState extends LinearOpMode{
                     break;
                 case RaiseOuttakeSample:
                     if (outtakeSlides.getIsOuttakeLeftHangExtend() && outtakeSlides.getIsOuttakeRightHangExtend()) {
-                        outtakeWristClaw.OuttakeWristSampleDropPosition();
+                        outtakeWristClaw.Drop();
                         highBasketState = HighBasketState.WristDumpSample;
                         outtakewristTimer.reset();
                     }
@@ -127,7 +126,7 @@ public class MainTeleOpState extends LinearOpMode{
                         highBasketState = HighBasketState.HighBasket;
                     }
                     else if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
-                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        outtakeWristClaw.Transfer();
                         highBasketState = HighBasketState.WristUpSample;
                         outtakewristTimer.reset();
                     }
@@ -135,7 +134,7 @@ public class MainTeleOpState extends LinearOpMode{
 
                 case HighBasket:
                     if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
-                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        outtakeWristClaw.Transfer();
                         highBasketState = HighBasketState.WristUpSample;
                         outtakewristTimer.reset();
                     }
@@ -164,7 +163,7 @@ public class MainTeleOpState extends LinearOpMode{
                     break;
                 case RaiseOuttakeSpecimen:
                     if (outtakeSlides.getIsOuttakeRightSpecimenExtend() && outtakeSlides.getIsOuttakeLeftSpecimenExtend()) {
-                        outtakeWristClaw.OuttakeWristSpecimenDropPosition();
+                        outtakeWristClaw.Clip();
                         specimenClipState = SpecimenClipState.WristOutSpecimen;
                         outtakewristTimer.reset();
                     }
@@ -179,7 +178,7 @@ public class MainTeleOpState extends LinearOpMode{
                         specimenClipState = SpecimenClipState.SpecimenHang;
                     }
                     else if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
-                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        outtakeWristClaw.Transfer();
                         specimenClipState = SpecimenClipState.WristInSpecimen;
                         outtakewristTimer.reset();
                     }
@@ -187,7 +186,7 @@ public class MainTeleOpState extends LinearOpMode{
 
                 case SpecimenHang:
                     if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
-                        outtakeWristClaw.OuttakeWristSamplePickupPosition();
+                        outtakeWristClaw.Transfer();
                         specimenClipState = SpecimenClipState.WristInSpecimen;
                         outtakewristTimer.reset();
                     }
