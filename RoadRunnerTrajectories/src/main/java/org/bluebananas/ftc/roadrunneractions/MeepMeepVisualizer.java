@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedLight;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import org.bluebananas.ftc.roadrunneractions.TrajectoryActionBuilders.AutoRefactorTest_Trajectories;
+import org.bluebananas.ftc.roadrunneractions.TrajectoryActionBuilders.SampleTrajectories;
 
 public class MeepMeepVisualizer {
     public static void main(String[] args) {
@@ -20,19 +20,20 @@ public class MeepMeepVisualizer {
                 .start();
     }
 
+    //------------------------------------------------------------------------------------------
     //begin auto runs
 
     //generates path for AutoRefactorTest
     private static RoadRunnerBotEntity AutoRefactorTest(MeepMeep meepMeep)
     {
         RoadRunnerBotEntity botEntity = CreateBotEntity(meepMeep, "blue");
-        botEntity.runAction(AutoRefactorTest_Trajectories.Full(botEntity.getDrive()::actionBuilder));
+        botEntity.runAction(SampleTrajectories.Full(botEntity.getDrive()::actionBuilder));
         return botEntity;
     }
 
     //end auto runs
 
-
+    //--------------------------------------------------------------------------------------------
     //generates botEntities
     private static RoadRunnerBotEntity CreateBotEntity(MeepMeep meepMeep, String color)
     {

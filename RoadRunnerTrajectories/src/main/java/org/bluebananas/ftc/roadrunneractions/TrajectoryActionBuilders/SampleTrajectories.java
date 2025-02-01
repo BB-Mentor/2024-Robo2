@@ -7,13 +7,14 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 
 import java.util.function.Function;
 
-public class AutoRefactorTest_Trajectories {
+public class SampleTrajectories {
     //key poses
     public final static Pose2d topLeft = new Pose2d(-47.4,47.4,Math.toRadians(0)); //make start pose public
     final static Pose2d topRight = new Pose2d(47.4,47.4,Math.toRadians(-90));
     final static Pose2d bottomRight = new Pose2d(47.4,-47.4,Math.toRadians(180));
     final static Pose2d bottomLeft = new Pose2d(-47.4,-47.4,Math.toRadians(90));
 
+    //------------------------------------------------------------------
     //Full path
     public static Action Full(Function<Pose2d, TrajectoryActionBuilder> builderFunction) {
         return new SequentialAction(
