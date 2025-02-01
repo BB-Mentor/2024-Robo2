@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class OuttakeWrist {
-    OpMode _opMode;
-    Servo _outtakeWrist;
+    OpMode _OpMode;
+    Servo _OuttakeWrist;
     public OuttakeWrist(OpMode opMode)
     {
-        _opMode = opMode;
-        _outtakeWrist = _opMode.hardwareMap.tryGet(Servo.class, "outtakeWrist");
+        _OpMode = opMode;
+        _OuttakeWrist = _OpMode.hardwareMap.tryGet(Servo.class, "outtakeWrist");
     }
 
     //-------------------------------------- ---
@@ -42,11 +42,11 @@ public class OuttakeWrist {
     //TeleOp base action
     void MoveTo(double position)
     {
-        if (_outtakeWrist == null)
+        if (_OuttakeWrist == null)
         {
-            _opMode.telemetry.addLine("Outtake Wrist servo not found!");
+            _OpMode.telemetry.addLine("Outtake Wrist servo not found!");
         } else {
-            _outtakeWrist.setPosition(position);
+            _OuttakeWrist.setPosition(position);
         }
     }
 

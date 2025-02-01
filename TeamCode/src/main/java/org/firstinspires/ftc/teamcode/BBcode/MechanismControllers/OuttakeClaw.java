@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class OuttakeClaw {
-    OpMode _opMode;
-    Servo _outtakeClaw;
+    OpMode _OpMode;
+    Servo _OuttakeClaw;
     public OuttakeClaw(OpMode opMode)
     {
-        _opMode = opMode;
-        _outtakeClaw = _opMode.hardwareMap.tryGet(Servo.class, "intakeClaw");
+        _OpMode = opMode;
+        _OuttakeClaw = _OpMode.hardwareMap.tryGet(Servo.class, "intakeClaw");
     }
 
     //-----------------------------------------
@@ -33,11 +33,11 @@ public class OuttakeClaw {
     //TeleOp base action
     void MoveTo(double position)
     {
-        if (_outtakeClaw == null)
+        if (_OuttakeClaw == null)
         {
-            _opMode.telemetry.addLine("Outtake Claw Servo not found!");
+            _OpMode.telemetry.addLine("Outtake Claw Servo not found!");
         } else {
-            _outtakeClaw.setPosition(position);
+            _OuttakeClaw.setPosition(position);
         }
     }
 

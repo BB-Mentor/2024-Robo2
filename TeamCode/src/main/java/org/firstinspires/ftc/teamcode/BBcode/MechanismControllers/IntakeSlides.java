@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class IntakeSlides {
-    OpMode _opMode;
-    Servo _intakeSlideRight;
-    Servo _intakeSlideLeft;
+    OpMode _OpMode;
+    Servo _IntakeSlideRight;
+    Servo _IntakeSlideLeft;
     public IntakeSlides(OpMode opMode) {
-        _opMode = opMode;
-        _intakeSlideRight = _opMode.hardwareMap.tryGet(Servo.class, "intakeSlideRight");
-        _intakeSlideLeft = _opMode.hardwareMap.tryGet(Servo.class, "intakeSlideLeft");
+        _OpMode = opMode;
+        _IntakeSlideRight = _OpMode.hardwareMap.tryGet(Servo.class, "intakeSlideRight");
+        _IntakeSlideLeft = _OpMode.hardwareMap.tryGet(Servo.class, "intakeSlideLeft");
     }
 
     //-----------------------------------------
@@ -36,12 +36,14 @@ public class IntakeSlides {
     //-----------------------------------------
     //TeleOp base action
      void MoveTo(double length) {
-        if (_intakeSlideLeft == null) {_opMode.telemetry.addLine("intakeSlideLeft servo not found!");}
-        else if (_intakeSlideRight == null) {_opMode.telemetry.addLine("intakeSlideRight servo not found!");}
+        if (_IntakeSlideLeft == null) {
+            _OpMode.telemetry.addLine("intakeSlideLeft servo not found!");}
+        else if (_IntakeSlideRight == null) {
+            _OpMode.telemetry.addLine("intakeSlideRight servo not found!");}
         else {
             double servoPosition = length * lengthToServoPosition;
-            _intakeSlideLeft.setPosition(servoPosition);
-            _intakeSlideRight.setPosition(servoPosition);
+            _IntakeSlideLeft.setPosition(servoPosition);
+            _IntakeSlideRight.setPosition(servoPosition);
         }
     }
 
