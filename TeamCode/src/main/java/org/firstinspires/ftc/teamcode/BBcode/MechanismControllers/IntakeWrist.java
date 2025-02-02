@@ -21,18 +21,20 @@ public class IntakeWrist {
 
     //-----------------------------------------
     //Actions for TeleOp
-    public void PickUp() {MoveTo(pickupPosition);}
-    public void Transfer() {MoveTo(transferPosition);}
+    public void PickUp() {
+        RotateTo(pickupPosition);}
+    public void Transfer() {
+        RotateTo(transferPosition);}
 
     //RR actions for auto
-    public Action PickUp_RR() {return new MoveTo_RR(pickupPosition);}
-    public Action Transfer_RR() {return new MoveTo_RR(transferPosition);}
+    public Action PickUp_RR() {return new RotateTo_RR(pickupPosition);}
+    public Action Transfer_RR() {return new RotateTo_RR(transferPosition);}
 
     //-----------------------------------------
     //TeleOp base action
-    void MoveTo(double position) {
+    void RotateTo(double position) {
         if (_IntakeWrist == null) {
-            _OpMode.telemetry.addLine("Intake Wrist servo not found!");
+            _OpMode.telemetry.addLine("intakeWrist servo not found!");
         }
         else {
             _IntakeWrist.setPosition(position);
@@ -40,12 +42,12 @@ public class IntakeWrist {
     }
 
     //RR auto base action
-    class MoveTo_RR implements Action {
+    class RotateTo_RR implements Action {
         double position;
-        MoveTo_RR(double p) {position = p;}
+        RotateTo_RR(double p) {position = p;}
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            MoveTo(position);
+            RotateTo(position);
             return false;
         }
     }

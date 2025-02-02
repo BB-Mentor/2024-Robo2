@@ -105,7 +105,7 @@ public class MainTeleOpState extends LinearOpMode{
             switch (highBasketState) {
                 case Home:
                     if (gamepad2.dpad_up && gamepad2.left_trigger > 0) {
-                        outtakeSlides.ExtendHighBasket();
+                        outtakeSlides.ExtendToHighBasket();
                         highBasketState = HighBasketState.RaiseOuttakeSample;
                     }
                     break;
@@ -116,7 +116,7 @@ public class MainTeleOpState extends LinearOpMode{
                         outtakewristTimer.reset();
                     }
                     else if (gamepad2.dpad_down && gamepad2.left_trigger > 0) {
-                        outtakeSlides.ExtendClosed();
+                        outtakeSlides.ExtendToHome();
                         highBasketState = HighBasketState.LowerOuttakeSample;
                     }
                     break;
@@ -142,7 +142,7 @@ public class MainTeleOpState extends LinearOpMode{
 
                 case WristUpSample:
                     if (outtakewristTimer.seconds() >= wristFlipTime) {
-                        outtakeSlides.ExtendClosed();
+                        outtakeSlides.ExtendToHome();
                         highBasketState = HighBasketState.LowerOuttakeSample;
                     }
                     break;
@@ -157,7 +157,7 @@ public class MainTeleOpState extends LinearOpMode{
             switch (specimenClipState) {
                 case Home:
                     if (gamepad2.dpad_up && gamepad2.right_trigger > 0) {
-                        outtakeSlides.ExtendSpecimen();
+                        outtakeSlides.ExtendToSpecimen();
                         specimenClipState = SpecimenClipState.RaiseOuttakeSpecimen;
                     }
                     break;
@@ -168,7 +168,7 @@ public class MainTeleOpState extends LinearOpMode{
                         outtakewristTimer.reset();
                     }
                     else if (gamepad2.dpad_down && gamepad2.right_trigger > 0) {
-                        outtakeSlides.ExtendClosed();
+                        outtakeSlides.ExtendToHome();
                         specimenClipState = SpecimenClipState.LowerOuttakeSpecimen;
                     }
                     break;
@@ -194,7 +194,7 @@ public class MainTeleOpState extends LinearOpMode{
 
                 case WristInSpecimen:
                     if (outtakewristTimer.seconds() >= wristFlipTime) {
-                        outtakeSlides.ExtendClosed();
+                        outtakeSlides.ExtendToHome();
                         specimenClipState = SpecimenClipState.LowerOuttakeSpecimen;
                     }
                     break;

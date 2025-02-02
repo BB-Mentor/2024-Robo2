@@ -21,21 +21,23 @@ public class IntakeSlides {
     final double lengthToServoPosition = 1;
 
     //Positions
-    double retractLength = 0;
-    double extendLength = 0;
+    double retractDistance = 0;
+    double extendDistance = 0;
 
     //-----------------------------------------
     //Actions for TeleOp
-    public void Extend() {MoveTo(extendLength);}
-    public void Retract() {MoveTo(retractLength);}
+    public void Extend() {
+        ExtendTo(extendDistance);}
+    public void Retract() {
+        ExtendTo(retractDistance);}
 
     //RR actions for auto
-    public Action Extend_RR() {return new MoveTo_RR(extendLength);}
-    public Action Retract_RR() {return new MoveTo_RR(retractLength);}
+    public Action Extend_RR() {return new ExtendTo_RR(extendDistance);}
+    public Action Retract_RR() {return new ExtendTo_RR(retractDistance);}
 
     //-----------------------------------------
     //TeleOp base action
-     void MoveTo(double length) {
+     void ExtendTo(double length) {
         if (_IntakeSlideLeft == null) {
             _OpMode.telemetry.addLine("intakeSlideLeft servo not found!");}
         else if (_IntakeSlideRight == null) {
@@ -48,11 +50,11 @@ public class IntakeSlides {
     }
 
     //RR auto base action
-    class MoveTo_RR implements Action {
+    class ExtendTo_RR implements Action {
         double length;
-        MoveTo_RR(double l) {length = l;}
+        ExtendTo_RR(double l) {length = l;}
         public boolean run(@NonNull TelemetryPacket packet) {
-            MoveTo(length);
+            ExtendTo(length);
             return false;
         }
     }

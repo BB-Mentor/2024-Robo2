@@ -35,7 +35,7 @@ public class IntakeClaw {
     {
         if (_IntakeClaw == null)
         {
-            _OpMode.telemetry.addLine("Intake Claw Servo not found!");
+            _OpMode.telemetry.addLine("intakeClaw Servo not found!");
         } else {
             _IntakeClaw.setPosition(position);
         }

@@ -12,7 +12,7 @@ public class OuttakeClaw {
     public OuttakeClaw(OpMode opMode)
     {
         _OpMode = opMode;
-        _OuttakeClaw = _OpMode.hardwareMap.tryGet(Servo.class, "intakeClaw");
+        _OuttakeClaw = _OpMode.hardwareMap.tryGet(Servo.class, "outtakeClaw");
     }
 
     //-----------------------------------------
@@ -35,7 +35,7 @@ public class OuttakeClaw {
     {
         if (_OuttakeClaw == null)
         {
-            _OpMode.telemetry.addLine("Outtake Claw Servo not found!");
+            _OpMode.telemetry.addLine("outtakeClaw Servo not found!");
         } else {
             _OuttakeClaw.setPosition(position);
         }

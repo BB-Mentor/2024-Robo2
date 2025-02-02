@@ -24,39 +24,39 @@ public class OuttakeWrist {
     //-----------------------------------------
     //Actions for TeleOp
     public void Transfer() {
-        MoveTo(transferPosition);
+        RotateTo(transferPosition);
     }
     public void Drop() {
-        MoveTo(dropPosition);
+        RotateTo(dropPosition);
     }
     public void Clip() {
-        MoveTo(clipPosition);
+        RotateTo(clipPosition);
     }
 
     //RR actions for auto
-    public Action Transfer_RR() {return new MoveTo_RR(transferPosition);}
-    public Action Drop_RR() {return new MoveTo_RR(dropPosition);}
-    public Action Clip_RR() {return new MoveTo_RR(clipPosition);}
+    public Action Transfer_RR() {return new RotateTo_RR(transferPosition);}
+    public Action Drop_RR() {return new RotateTo_RR(dropPosition);}
+    public Action Clip_RR() {return new RotateTo_RR(clipPosition);}
 
     //-----------------------------------------
     //TeleOp base action
-    void MoveTo(double position)
+    void RotateTo(double position)
     {
         if (_OuttakeWrist == null)
         {
-            _OpMode.telemetry.addLine("Outtake Wrist servo not found!");
+            _OpMode.telemetry.addLine("outtakeWrist servo not found!");
         } else {
             _OuttakeWrist.setPosition(position);
         }
     }
 
     //RR auto base action
-    class MoveTo_RR implements Action {
+    class RotateTo_RR implements Action {
         double position;
-        MoveTo_RR(double p) {position = p;}
+        RotateTo_RR(double p) {position = p;}
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            MoveTo(position);
+            RotateTo(position);
             return false;
         }
     }
